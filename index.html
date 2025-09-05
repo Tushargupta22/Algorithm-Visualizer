@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔄 Algorithm Visualizer - Sorting & Searching</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔄 Algorithm Visualizer</h1>
+            <p class="abc">Interactive Sorting & Searching Algorithms with Complexity Analysis</p>
+        </div>
+        
+        
+        <!-- Added main-content section with the provided code -->
+        <div class="main-content">
+            <!-- LEFT: Visualizer -->
+            <div class="panel">
+                <div class="controls">
+                    <!-- <div class="control-group">
+                        <label for="algo">Algorithm</label>
+                        <select id="algo">
+                            <optgroup label="Sorting">
+                                <option>Bubble Sort</option>
+                                <option>Selection Sort</option>
+                                <option>Insertion Sort</option>
+                                <option>Merge Sort</option>
+                                <option>Quick Sort</option>
+                                <option>Heap Sort</option>
+                                <option>Radix Sort</option>
+                                <option>Bucket Sort</option>
+                            </optgroup>
+                            <optgroup label="Searching">
+                                <option>Linear Search</option>
+                                <option>Binary Search</option>
+                            </optgroup>
+                            <option>Compare All Algorithms</option>
+                        </select>
+                    </div> -->
+
+                    <div class="control-group">
+                        <label for="customArray">Custom Array (comma separated)</label>
+                        <input id="customArray" type="text" placeholder="e.g., 5,3,8,1,9,2" />
+                        <button onclick="useCustomArray()">Use Custom Array</button>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="size">Array Size: <span id="sizeVal">50</span></label>
+                        <input type="range" id="size" min="10" max="100" value="50" />
+                    </div>
+                    <div class="control-group">
+                        <label for="speed">Speed (ms/step): <span id="speedVal">50</span></label>
+                        <input type="range" id="speed" min="1" max="200" value="50" />
+                    </div>
+                    <div class="control-group">
+                        <label for="minVal">Min Value</label>
+                        <input id="minVal" type="number" value="10" min="1" />
+                    </div>
+                    <div class="control-group">
+                        <label for="maxVal">Max Value</label>
+                        <input id="maxVal" type="number" value="100" min="10" />
+                    </div>
+                    <!-- <div class="control-group">
+                        <label for="key">Search Key (for Search algorithms)</label>
+                        <input id="key" type="number" placeholder="Enter number to find" />
+                    </div> -->
+                    <!-- Add custom array input -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- Your existing controls section -->
+        <div class="controls">
+            <div class="control-group">
+                <h3>🎛 Array Controls</h3>
+                <button onclick="generateArray()">Generate New Array</button>
+                <button onclick="generateSortedArray()">Generate Sorted</button>
+                <button onclick="generateReversedArray()">Generate Reversed</button>
+                <button onclick="useCustomArray()">Use Custom Array</button>
+                <div style="margin-top: 10px;">
+                    Size: <input type="range" id="arraySize" min="10" max="100" value="50" onchange="generateArray()">
+                    <span id="sizeValue">50</span>
+                </div>
+                <div style="margin-top: 10px;">
+                    Speed: <input type="range" id="speed" min="1" max="100" value="50">
+                </div>
+            </div>
+            
+            <div class="control-group">
+                <h3>🔄 Sorting Algorithms</h3>
+                <button onclick="startSort('bubble')">Bubble Sort</button>
+                <button onclick="startSort('selection')">Selection Sort</button>
+                <button onclick="startSort('insertion')">Insertion Sort</button>
+                <button onclick="startSort('merge')">Merge Sort</button>
+                <button onclick="startSort('quick')">Quick Sort</button>
+                <button onclick="startSort('heap')">Heap Sort</button>
+                <button onclick="startSort('radix')">Radix Sort</button>
+                <button onclick="startSort('bucket')">Bucket Sort</button>
+                <button onclick="compareSortingAlgorithms()">Compare All Sorting</button>
+            </div>
+            
+            <div class="control-group">
+                <h3>🔍 Searching Algorithms</h3>
+                <input type="number" id="searchValue" placeholder="Search value" min="1" max="100">
+                <button onclick="startSearch('linear')">Linear Search</button>
+                <button onclick="startSearch('binary')">Binary Search</button>
+    
+                <button onclick="compareSearchingAlgorithms()">Compare All Searching</button>
+            </div>
+        </div>
+        
+        <div class="visualizer">
+            <div class="bars-container">
+                <h3>📊 Array Visualization</h3>
+                <div class="bars" id="barsContainer"></div>
+                <div class="performance-metrics">
+                    <div class="metric">
+                        <div class="metric-value" id="comparisons">0</div>
+                        <div class="metric-label">Comparisons</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" id="swaps">0</div>
+                        <div class="metric-label">Swaps</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" id="time">0ms</div>
+                        <div class="metric-label">Time</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" id="currentAlgorithm">None</div>
+                        <div class="metric-label">Algorithm</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="stats-panel">
+                <h3>📈 Performance Chart</h3>
+                <div class="chart-container">
+                    <canvas id="performanceChart"></canvas>
+                </div>
+                <div class="algorithm-info" id="algorithmInfo">
+                    <h4>Algorithm Information</h4>
+                    <p>Select an algorithm to see detailed information about its time and space complexity.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="comparison-section">
+            <h3>📊 Algorithm Comparison</h3>
+            <div class="comparison-controls">
+                <button onclick="runAllComparisons()">Run All Comparisons</button>
+                <button onclick="showComparisonResults()">Show Comparison Results</button>
+                
+            </div>
+            <div class="chart-container">
+                <canvas id="comparisonChart"></canvas>
+            </div>
+            <div id="comparisonResults"></div>
+        </div>
+        
+        <div class="complexity-info">
+            <div class="complexity-card">
+                <h3>⏱ Time Complexity Comparison</h3>
+                <table class="complexity-table">
+                    <thead>
+                        <tr>
+                            <th>Algorithm</th>
+                            <th>Best Case</th>
+                            <th>Average Case</th>
+                            <th>Worst Case</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Bubble Sort</td><td>O(n)</td><td>O(n²)</td><td>O(n²)</td></tr>
+                        <tr><td>Selection Sort</td><td>O(n²)</td><td>O(n²)</td><td>O(n²)</td></tr>
+                        <tr><td>Insertion Sort</td><td>O(n)</td><td>O(n²)</td><td>O(n²)</td></tr>
+                        <tr><td>Merge Sort</td><td>O(n log n)</td><td>O(n log n)</td><td>O(n log n)</td></tr>
+                        <tr><td>Quick Sort</td><td>O(n log n)</td><td>O(n log n)</td><td>O(n²)</td></tr>
+                        <tr><td>Heap Sort</td><td>O(n log n)</td><td>O(n log n)</td><td>O(n log n)</td></tr>
+                        <tr><td>Radix Sort</td><td>O(nk)</td><td>O(nk)</td><td>O(nk)</td></tr>
+                        <tr><td>Bucket Sort</td><td>O(n + k)</td><td>O(n + k)</td><td>O(n²)</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="complexity-card">
+                <h3>💾 Space Complexity</h3>
+                <table class="complexity-table">
+                    <thead>
+                        <tr>
+                            <th>Algorithm</th>
+                            <th>Space Complexity</th>
+                            <th>In-Place</th>
+                            <th>Stable</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Bubble Sort</td><td>O(1)</td><td>Yes</td><td>Yes</td></tr>
+                        <tr><td>Selection Sort</td><td>O(1)</td><td>Yes</td><td>No</td></tr>
+                        <tr><td>Insertion Sort</td><td>O(1)</td><td>Yes</td><td>Yes</td></tr>
+                        <tr><td>Merge Sort</td><td>O(n)</td><td>No</td><td>Yes</td></tr>
+                        <tr><td>Quick Sort</td><td>O(log n)</td><td>Yes</td><td>No</td></tr>
+                        <tr><td>Heap Sort</td><td>O(1)</td><td>Yes</td><td>No</td></tr>
+                        <tr><td>Radix Sort</td><td>O(n + k)</td><td>No</td><td>Yes</td></tr>
+                        <tr><td>Bucket Sort</td><td>O(n + k)</td><td>No</td><td>Yes</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="search-section">
+            <h3>🔍 Search Results</h3>
+            <div id="searchResults"></div>
+            <div class="chart-container">
+                <canvas id="searchChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
